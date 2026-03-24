@@ -14,6 +14,10 @@
         <!-- HUD -->
         <div id="hud" class="hidden">
             <div class="hud-panel left">
+                <div class="minimap-container">
+                    <canvas id="minimap" width="200" height="200"></canvas>
+                </div>
+                <div class="hud-spacer"></div>
                 <div class="speed-container">
                     <span id="speed">0</span>
                     <span class="unit">KM/H</span>
@@ -44,9 +48,20 @@
             <div class="menu-content">
                 <h1>FORMULA <span class="neon-red">WEB</span></h1>
                 <p class="subtitle">HTML5 Canvas Racing Experience</p>
+                
+                <div class="track-selection">
+                    <h3>SELECT TRACK</h3>
+                    <div class="track-buttons">
+                        <button class="track-btn active" data-track="0">MONZA (FAST)</button>
+                        <button class="track-btn" data-track="1">SUZUKA (TECHNICAL)</button>
+                        <button class="track-btn" data-track="2">OVAL (SPEED)</button>
+                    </div>
+                </div>
+
                 <div class="controls">
                     <p>Drive: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></p>
-                    <p>Drift: <kbd>SPACE</kbd></p>
+                    <p>Drift/Handbrake: <kbd>SPACE</kbd></p>
+                    <p class="audio-note">🔊 Audio starts automatically when game begins</p>
                 </div>
                 <button id="start-btn" class="neon-button">START ENGINE</button>
             </div>

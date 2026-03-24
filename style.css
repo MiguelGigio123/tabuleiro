@@ -47,7 +47,7 @@ canvas {
 
 .menu-content {
     background: rgba(20, 20, 25, 0.85);
-    padding: 3rem 5rem;
+    padding: 3rem 4rem;
     border-radius: 20px;
     border: 1px solid rgba(255, 50, 50, 0.3);
     box-shadow: 0 0 40px rgba(255, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
@@ -61,7 +61,7 @@ canvas {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-weight: 900;
     margin-bottom: 0.5rem;
     letter-spacing: 4px;
@@ -74,17 +74,66 @@ h1 {
 }
 
 .subtitle {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #aaa;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 2px;
 }
 
+.track-selection {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(0,0,0,0.4);
+    border-radius: 10px;
+}
+
+.track-selection h3 {
+    margin-bottom: 0.8rem;
+    color: #cfcfcf;
+}
+
+.track-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.track-btn {
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 0.5rem 1rem;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.track-btn:hover {
+    color: #fff;
+    border-color: #888;
+}
+
+.track-btn.active {
+    background: rgba(255, 42, 42, 0.2);
+    color: #ff2a2a;
+    border-color: #ff2a2a;
+    box-shadow: 0 0 15px rgba(255, 42, 42, 0.3);
+}
+
+
 .controls {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     color: #ccc;
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.8;
+}
+
+.audio-note {
+    font-size: 0.8rem;
+    color: #ffaa00;
+    margin-top: 10px;
 }
 
 kbd {
@@ -175,6 +224,29 @@ kbd {
     top: 2rem;
     right: 2rem;
     min-width: 280px;
+}
+
+/* Minimap */
+.minimap-container {
+    width: 15vw;
+    min-width: 150px;
+    max-width: 250px;
+    aspect-ratio: 1/1;
+    border-radius: 15px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.2);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+#minimap {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.hud-spacer {
+    height: 1rem;
 }
 
 .speed-container {
