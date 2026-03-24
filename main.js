@@ -135,6 +135,64 @@ function initAudio() {
     }
 }
 
+// ====== BGM PROCEDURAL SYNTH ======
+let bpm = 125;
+let noteTime = 60 / bpm / 4;
+let bgmPattern = [
+    174.61, 0, 261.63, 0,
+    311.13, 0, 261.63, 0,
+    349.23, 0, 261.63, 0,
+    261.63, 207.65, 174.61, 0
+];
+let bgmIndex = 0;
+let nextNoteTime = 0;
+
+function scheduleBGM() {
+    if (!audioCtx || gameState !== 'PLAYING') return;
+    
+    if (nextNoteTime === 0) nextNoteTime = audioCtx.currentTime + 0.1;
+
+    while (nextNoteTime < audioCtx.currentTime + 0.1) {
+        let freq = bgmPattern[bgmIndex];
+        
+        if (freq > 0) {
+            let osc = audioCtx.createOscillator();
+            osc.type = 'square';
+            osc.frequency.value = freq;
+            let gain = audioCtx.createGain();
+            
+            gain.gain.setValueAtTime(0, nextNoteTime);
+            gain.gain.linearRampToValueAtTime(0.06, nextNoteTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, nextNoteTime + noteTime - 0.01);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(nextNoteTime);
+            osc.stop(nextNoteTime + noteTime);
+        }
+        
+        // Kick Drum
+        if (bgmIndex % 4 === 0) {
+            let kickOsc = audioCtx.createOscillator();
+            let kickGain = audioCtx.createGain();
+            kickOsc.frequency.setValueAtTime(150, nextNoteTime);
+            kickOsc.frequency.exponentialRampToValueAtTime(0.01, nextNoteTime + 0.1);
+            
+            kickGain.gain.setValueAtTime(0.4, nextNoteTime);
+            kickGain.gain.exponentialRampToValueAtTime(0.01, nextNoteTime + 0.1);
+            
+            kickOsc.connect(kickGain);
+            kickGain.connect(audioCtx.destination);
+            kickOsc.start(nextNoteTime);
+            kickOsc.stop(nextNoteTime + 0.15);
+        }
+        
+        bgmIndex = (bgmIndex + 1) % bgmPattern.length;
+        nextNoteTime += noteTime;
+    }
+}
+// ===================================
+
 // Entities
 const car = {
     x: 0, y: 0, vx: 0, vy: 0,
@@ -155,9 +213,10 @@ class BotCar {
         this.highestCheckpoint = 0;
         this.lastCheckpoint = 0;
         this.currentLap = 1;
-        this.maxSpeed = 16 + speedVariance; 
-        this.accel = 0.12 + Math.random()*0.03;
-        this.lookAhead = 3 + Math.floor(Math.random()*2);
+        // Increased AI Difficulty by ~75%
+        this.maxSpeed = 24 + speedVariance; 
+        this.accel = 0.20 + Math.random()*0.05;
+        this.lookAhead = 3 + Math.floor(Math.random()*3);
     }
     
     update() {
@@ -205,8 +264,8 @@ class BotCar {
         // Speed control
         let isSharpTurn = Math.abs(angleDiff) > 0.4;
         let engineForce = this.accel;
-        if (isSharpTurn && this.speed > this.maxSpeed * 0.5) {
-            engineForce = -0.1; // Brake
+        if (isSharpTurn && this.speed > this.maxSpeed * 0.75) {
+            engineForce = -0.05; // Soft Brake
         } else if (this.speed > this.maxSpeed) {
             engineForce = 0;
         }
@@ -343,6 +402,7 @@ function initGame() {
     startScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
     
+    nextNoteTime = 0; // reset for BGM
     gameState = 'PLAYING';
     requestAnimationFrame(gameLoop);
 }
@@ -661,6 +721,7 @@ function updateHUD(now) {
 function gameLoop(now) {
     if (gameState !== 'PLAYING') return;
     
+    scheduleBGM(); // Procedural Music
     handlePhysics();
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
