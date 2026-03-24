@@ -18,6 +18,7 @@ const timeEl = document.getElementById('time');
 const bestTimeEl = document.getElementById('best-time');
 const finalTimeEl = document.getElementById('final-time');
 const finalBestEl = document.getElementById('final-best');
+const posEl = document.getElementById('position');
 
 const trackButtons = document.querySelectorAll('.track-btn');
 
@@ -151,6 +152,9 @@ class BotCar {
         this.x = x; this.y = y; this.vx = 0; this.vy = 0;
         this.angle = 0; this.speed = 0; this.color = color;
         this.checkpoint = 0;
+        this.highestCheckpoint = 0;
+        this.lastCheckpoint = 0;
+        this.currentLap = 1;
         this.maxSpeed = 16 + speedVariance; 
         this.accel = 0.12 + Math.random()*0.03;
         this.lookAhead = 3 + Math.floor(Math.random()*2);
@@ -170,6 +174,16 @@ class BotCar {
             }
         }
         this.checkpoint = cIdx;
+
+        let nPts = trackPath.length;
+        if (cIdx > this.highestCheckpoint && cIdx <= this.highestCheckpoint + Math.floor(nPts/4)) {
+            this.highestCheckpoint = cIdx;
+        }
+        if (this.lastCheckpoint > nPts * 0.9 && cIdx < nPts * 0.1 && this.highestCheckpoint > nPts * 0.5) {
+            this.currentLap++;
+            this.highestCheckpoint = 0;
+        }
+        this.lastCheckpoint = cIdx;
 
         // Target point
         let targetIdx = (this.checkpoint + this.lookAhead) % trackPath.length;
@@ -311,7 +325,12 @@ function initGame() {
         new BotCar(car.x - Math.cos(car.angle)*250 - Math.sin(car.angle)*60, car.y - Math.sin(car.angle)*250 + Math.cos(car.angle)*60, '#2aff2a', 2),
         new BotCar(car.x - Math.cos(car.angle)*350 + Math.sin(car.angle)*60, car.y - Math.sin(car.angle)*350 - Math.cos(car.angle)*60, '#ffff2a', 3)
     ];
-    bots.forEach(b => b.angle = startAngle);
+    bots.forEach(b => {
+        b.angle = startAngle;
+        b.highestCheckpoint = 0;
+        b.lastCheckpoint = 0;
+        b.currentLap = 1;
+    });
 
     currentLap = 1;
     raceStartTime = performance.now();
@@ -554,7 +573,7 @@ function drawCar(ctx) {
     ctx.fillRect(-15, -12, 2, 24);
 
     // Body
-    ctx.fillStyle = '#ff2a2a';
+    ctx.fillStyle = '#a22aff';
     ctx.beginPath();
     ctx.moveTo(30, 0); ctx.lineTo(20, -8);
     ctx.lineTo(-20, -10); ctx.lineTo(-20, 10);
@@ -597,6 +616,16 @@ function updateHUD(now) {
         lapEl.innerText = `${Math.min(currentLap, totalLaps)}/${totalLaps}`;
         bestTimeEl.innerText = formatTime(bestLapTime);
         timeEl.innerText = formatTime(now - currentLapStartTime);
+        
+        let racers = [
+            { isPlayer: true, score: currentLap * 10000 + highestCheckpoint },
+            ...bots.map(b => ({ isPlayer: false, score: b.currentLap * 10000 + b.highestCheckpoint }))
+        ];
+        racers.sort((a, b) => b.score - a.score);
+        let pos = racers.findIndex(r => r.isPlayer) + 1;
+        let posStr = pos + (["ST","ND","RD"][((pos+90)%100-10)%10-1] || "TH");
+        if(posEl) posEl.innerText = posStr;
+
         uiUpdateTimer = now;
         
         // Minimap Render
@@ -623,7 +652,7 @@ function updateHUD(now) {
         
         // player blink
         if (Math.floor(now/200) % 2 === 0) {
-            mCtx.fillStyle = '#ff2a2a'; mCtx.beginPath(); mCtx.arc(car.x, car.y, 200, 0, Math.PI*2); mCtx.fill();
+            mCtx.fillStyle = '#a22aff'; mCtx.beginPath(); mCtx.arc(car.x, car.y, 200, 0, Math.PI*2); mCtx.fill();
         }
         mCtx.restore();
     }
@@ -669,7 +698,7 @@ function initialRender() {
     ctx.fillStyle = '#111';
     ctx.fillRect(15, -16, 16, 8); ctx.fillRect(15, 8, 16, 8);  
     ctx.fillRect(-15, -16, 16, 8); ctx.fillRect(-15, 8, 16, 8);  
-    ctx.fillStyle = '#ff2a2a';
+    ctx.fillStyle = '#a22aff';
     ctx.beginPath(); ctx.moveTo(30, 0); ctx.lineTo(20, -8); ctx.lineTo(-20, -10); ctx.lineTo(-20, 10); ctx.lineTo(20, 8); ctx.fill();
     ctx.fillStyle = '#111'; ctx.fillRect(25, -14, 5, 28); ctx.fillRect(-22, -16, 6, 32);
     ctx.fillStyle = '#050505'; ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI*2); ctx.fill();

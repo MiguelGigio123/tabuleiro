@@ -49,8 +49,8 @@ canvas {
     background: rgba(20, 20, 25, 0.85);
     padding: 3rem 4rem;
     border-radius: 20px;
-    border: 1px solid rgba(255, 50, 50, 0.3);
-    box-shadow: 0 0 40px rgba(255, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(162, 42, 255, 0.3); /* Purple border */
+    box-shadow: 0 0 40px rgba(162, 42, 255, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
     text-align: center;
     animation: fadeIn 0.5s ease-out;
 }
@@ -69,8 +69,8 @@ h1 {
 }
 
 .neon-red {
-    color: #ff2a2a;
-    text-shadow: 0 0 10px #ff2a2a, 0 0 20px #ff2a2a, 0 0 40px #ff0000;
+    color: #a22aff; /* Now Neon Purple */
+    text-shadow: 0 0 10px #a22aff, 0 0 20px #a22aff, 0 0 40px #7b00ff;
 }
 
 .subtitle {
@@ -116,12 +116,11 @@ h1 {
 }
 
 .track-btn.active {
-    background: rgba(255, 42, 42, 0.2);
-    color: #ff2a2a;
-    border-color: #ff2a2a;
-    box-shadow: 0 0 15px rgba(255, 42, 42, 0.3);
+    background: rgba(162, 42, 255, 0.2);
+    color: #a22aff;
+    border-color: #a22aff;
+    box-shadow: 0 0 15px rgba(162, 42, 255, 0.3);
 }
-
 
 .controls {
     margin-bottom: 2rem;
@@ -142,7 +141,7 @@ kbd {
     border-radius: 4px;
     padding: 0.2rem 0.6rem;
     margin: 0 0.2rem;
-    color: #ff2a2a;
+    color: #a22aff;
     box-shadow: 0 2px 0 rgba(255,255,255,0.2);
     display: inline-block;
 }
@@ -154,21 +153,21 @@ kbd {
     font-size: 1.5rem;
     font-weight: 700;
     padding: 1rem 3rem;
-    border: 2px solid #ff2a2a;
+    border: 2px solid #a22aff;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 2px;
-    box-shadow: 0 0 15px rgba(255, 42, 42, 0.3), inset 0 0 10px rgba(255, 42, 42, 0.1);
+    box-shadow: 0 0 15px rgba(162, 42, 255, 0.3), inset 0 0 10px rgba(162, 42, 255, 0.1);
     position: relative;
     overflow: hidden;
 }
 
 .neon-button:hover {
-    background: #ff2a2a;
-    color: #000;
-    box-shadow: 0 0 30px #ff2a2a, inset 0 0 20px #fff;
+    background: #a22aff;
+    color: #fff;
+    box-shadow: 0 0 30px #a22aff, inset 0 0 20px #fff;
     transform: scale(1.05);
 }
 
@@ -183,7 +182,7 @@ kbd {
 }
 
 .stats span {
-    color: #ff2a2a;
+    color: #a22aff;
     font-weight: bold;
 }
 
@@ -266,7 +265,7 @@ kbd {
 
 .unit {
     font-size: 1.2rem;
-    color: #ff2a2a;
+    color: #a22aff;
     margin-left: 0.5rem;
     font-weight: 700;
 }
@@ -287,7 +286,7 @@ kbd {
     text-shadow: 0 0 10px rgba(0,255,204,0.5);
 }
 
-.lap-container, .time-container, .best-time-container {
+.pos-container, .lap-container, .time-container, .best-time-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -298,6 +297,7 @@ kbd {
     margin-bottom: 0.2rem;
 }
 
+.pos-container span:last-child,
 .lap-container span:last-child,
 .time-container span:last-child {
     color: #fff;
